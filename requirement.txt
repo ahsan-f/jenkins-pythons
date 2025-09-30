@@ -1,0 +1,9 @@
+# Test and Quality Tools
+pytest
+pytest-cov
+flake8
+bandit
+
+# Environment Management
+virtualenv
+tox
