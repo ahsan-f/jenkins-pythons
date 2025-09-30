@@ -1,0 +1,18 @@
+# Start with the official Jenkins agent image
+FROM jenkins/agent:latest
+
+# Switch to the root user to install packages
+USER root
+
+# Install Python, pip, build-essential, and curl
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip build-essential curl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Switch to the Jenkins user for the rest of the build
+USER jenkins
+
+# Copy the requirements file and install the packages
+COPY requirements.txt /tmp/requirements.txt
+RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
