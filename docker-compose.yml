@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  jenkins-controller:
+    container_name: jenkins-controller
+    build:
+      context: .
+      dockerfile: Dockerfile.controller # Assuming your original Dockerfile is renamed
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+
+  jenkins-agent:
+    container_name: jenkins-agent
+    image: jenkins/agent:latest # Use the pre-built official agent image
+    environment:
+      # These must match the agent node configuration in Jenkins
+      - JENKINS_URL=http://jenkins-controller:8080
+      # - JENKINS_SECRET= 
+       # - JENKINS_AGENT_NAME=docker
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock # Optional, for Docker-in-Docker builds
+
+volumes:
+  jenkins_home:
